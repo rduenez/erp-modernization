@@ -1,0 +1,6 @@
+legacy_id,company_name,raw_address,currency,credit_limit,account_status
+101,Acme Corp,123 Main St; new york,USD,1000,Active
+102,Acme Corp,123 main st; NY,USD,1000,Active
+103,Tech Solutions Mexico,Reforma 222; CDMX,MXN,50000,Active
+104,Ghost LLC,,USD,500,Active
+105,Bankrupt Bros,999 Dead End; Texas,USD,0,Inactive

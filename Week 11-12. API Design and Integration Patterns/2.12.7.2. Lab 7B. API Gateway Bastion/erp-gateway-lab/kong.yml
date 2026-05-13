@@ -1,0 +1,27 @@
+_format_version: "3.0"
+
+# 1. Define the upstream service (Our hidden Python container)
+services:
+  - name: legacy-erp-service
+    url: http://erp-legacy-api:5011
+    
+    # 2. Define how the outside world reaches this service
+    routes:
+      - name: inventory-route
+        paths:
+          - /api/v1/inventory
+          
+    # 3. THE BASTION: Attach the Key-Auth plugin to this service
+    plugins:
+      - name: key-auth
+        config:
+          key_names:
+            - x-api-key # Kong will look for this header
+          hide_credentials: true # Kong strips the key before sending to the backend!
+
+# 4. Define who is allowed to access the gateway
+consumers:
+  - username: mobile_app_client
+    keyauth_credentials:
+      - key: "kong_super_secret_key_2026"
+

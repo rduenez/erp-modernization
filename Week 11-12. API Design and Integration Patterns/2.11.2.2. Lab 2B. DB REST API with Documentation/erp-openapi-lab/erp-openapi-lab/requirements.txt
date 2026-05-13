@@ -1,0 +1,4 @@
+Flask==3.0.0
+Flasgger==0.9.7.1
+SQLAlchemy==2.0.29
+psycopg2-binary==2.9.9

@@ -1,0 +1,34 @@
+name: ERP DevOps Pipeline
+
+# Trigger the automation every time code is pushed to the main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Pull the code from the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up the environment automatically
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 3. Test the code (Simulated linting/syntax check)
+      - name: Install Dependencies and Lint
+        run: |
+          pip install flake8
+          flake8 "Week 15-16. DevOps and CICD Fundamentals/2.15.1.1. Lab 1. The DevOps Philosophy/erp-devops-lab/inventory_api.py" --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      # 4. Build the Container Image (Infrastructure as Code execution)
+      - name: Build Container Image
+        run: |
+          docker build -t erp-inventory-api:latest "Week 15-16. DevOps and CICD Fundamentals/2.15.1.1. Lab 1. The DevOps Philosophy/erp-devops-lab/"
+          echo "Image built successfully. Ready for deployment."

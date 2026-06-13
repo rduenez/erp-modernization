@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ERP_Export>
+    <Order>
+        <OrderID>1001</OrderID>
+        <Customer>Acme Corp</Customer>
+        <TotalValue>8500.00</TotalValue>
+    </Order>
+    <Order>
+        <OrderID>1002</OrderID>
+        <Customer>Mom and Pop Shop</Customer>
+        <TotalValue>450.00</TotalValue>
+    </Order>
+</ERP_Export>

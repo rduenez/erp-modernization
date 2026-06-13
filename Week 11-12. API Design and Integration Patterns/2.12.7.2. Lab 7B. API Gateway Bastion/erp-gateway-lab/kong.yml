@@ -24,4 +24,3 @@ consumers:
   - username: mobile_app_client
     keyauth_credentials:
       - key: "kong_super_secret_key_2026"
-

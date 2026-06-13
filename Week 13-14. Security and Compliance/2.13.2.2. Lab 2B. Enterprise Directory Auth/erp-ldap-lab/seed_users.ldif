@@ -1,0 +1,19 @@
+# 1. Create the Employees Organizational Unit
+dn: ou=employees,dc=erp,dc=com
+objectClass: organizationalUnit
+ou: employees
+
+# 2. Create the User: John Doe (uid=jdoe)
+dn: uid=jdoe,ou=employees,dc=erp,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: jdoe
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 10000
+gidNumber: 5000
+userPassword: corp_password_2026
+homeDirectory: /home/jdoe

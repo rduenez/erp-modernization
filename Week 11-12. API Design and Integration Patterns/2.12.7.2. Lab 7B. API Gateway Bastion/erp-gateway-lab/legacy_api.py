@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # A completely unprotected route!
-@app.route('/inventory', methods=['GET'])
+@app.route('/api/v1/inventory', methods=['GET'])
 def get_inventory():
     print("BACKEND HIT: Returning inventory data...")
     return jsonify({

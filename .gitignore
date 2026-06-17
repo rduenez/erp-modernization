@@ -167,3 +167,28 @@ Thumbs.db
 
 # Build scripts output
 # build.sh outputs if any, but since scripts are tracked, maybe not
+
+# Terraform
+# Local Terraform directories
+.terraform/
+# State files
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+# Crash logs
+crash.log
+# Override files (usually local)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Sensitive variable files
+*.tfvars
+*.tfvars.json
+# Terraform lock and CLI config
+.terraform.lock.hcl
+.terraformrc
+terraform.rc
+# Generated plan files
+*.tfplan

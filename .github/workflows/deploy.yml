@@ -1,0 +1,38 @@
+name: Deploy Infrastructure and App
+
+on:
+  push:
+    branches:
+      - main
+  # Trigger the automation when a Pull Request is opened against main
+  pull_request:
+    branches:
+      - main
+jobs:
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      # This runs on BOTH Pull Requests and Pushes to main
+      - name: Terraform Plan
+        run: terraform plan
+
+      # This ONLY runs when code is merged into the main branch
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve

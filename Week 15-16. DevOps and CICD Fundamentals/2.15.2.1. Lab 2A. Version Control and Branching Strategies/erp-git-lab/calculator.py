@@ -1,6 +1,6 @@
 def calculate_total(subtotal, tax_rate):
     # BUG: The tax formula is completely wrong!
-    total = subtotal - tax_rate 
+    total = (subtotal - discount) - tax_rate 
     return total
 
 

@@ -11,6 +11,9 @@ on:
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.15.2.2. Lab 2B. PR, Merge and IaC/devops-terraform-lab'  # <-- Applies to all 'run' steps in this job
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

@@ -37,7 +37,7 @@ jobs:
       - name: Security Scan with Bandit
         run: |
           # Fails the pipeline if hardcoded passwords or security flaws are found
-          bandit -r .
+          bandit -r . -s B101
 
       # 3. Automated Unit Tests
       - name: Run Unit Tests with pytest

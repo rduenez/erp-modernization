@@ -1,0 +1,44 @@
+name: ERP Continuous Integration
+
+# Trigger this pipeline on every push and pull request to the main branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.15.3.1. Lab 3. Continuous Integration (CI)'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 1. Code Quality Check (Linting)
+      - name: Lint with flake8
+        run: |
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      # 2. Security Scanning
+      - name: Security Scan with Bandit
+        run: |
+          # Fails the pipeline if hardcoded passwords or security flaws are found
+          bandit -r .
+
+      # 3. Automated Unit Tests
+      - name: Run Unit Tests with pytest
+        run: |
+          pytest -v
+

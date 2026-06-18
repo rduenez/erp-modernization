@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.15.3.1. Lab 3. Continuous Integration (CI)'
+        working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.15.3.1. Lab 3. Continuous Integration (CI)/erp-ci-lab'  # <-- Applies to all 'run' steps in this job
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

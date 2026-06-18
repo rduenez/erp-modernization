@@ -6,6 +6,3 @@ def calculate_total_with_iva(subtotal):
     iva_rate = 0.15 
     iva_amount = subtotal * iva_rate
     return subtotal + iva_amount
-
-# A hardcoded password to test our security scanner
-API_SECRET = "super_secret_dev_password_123"

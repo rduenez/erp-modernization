@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 'Week 15-16. DevOps and CICD Fundamentals\2.15.4.1. Lab 4. CD, Multi-Stage Pipelines & Feature Flags\erp-cd-lab'
+        working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.15.4.1. Lab 4. CD, Multi-Stage Pipelines & Feature Flags/erp-cd-lab'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -1,0 +1,51 @@
+name: ERP Continuous Delivery Pipeline
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  # STAGE 1: CI (Build & Test)
+  continuous-integration:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 'Week 15-16. DevOps and CICD Fundamentals\2.15.4.1. Lab 4. CD, Multi-Stage Pipelines & Feature Flags\erp-cd-lab'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - name: Run Unit Tests
+        run: pytest
+  
+  # STAGE 2: Deploy to Staging (Automatic)
+  deploy-staging:
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - name: Deploy to Staging Infrastructure
+        run: |
+          echo "🚀 Simulating deployment to Staging Servers..."
+          echo "Setting FEATURE_FLAG: ENABLE_NEW_PAYMENT_GATEWAY=true"
+          sleep 3
+      # Automated Smoke Test in Staging
+      - name: Run Staging Smoke Tests
+        run: |
+          echo "💨 Running automated smoke tests against staging endpoint..."
+          echo "✅ Smoke tests passed."
+      
+  # STAGE 3: Deploy to Production (Continuous Delivery - Requires Manual Approval)
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    # This environment tag triggers the GitHub manual approval gate we set up!
+    environment: Production 
+    steps:
+      - name: Deploy to Production Infrastructure
+        run: |
+          echo "🚀 Simulating deployment to Production Servers..."
+          echo "Setting FEATURE_FLAG: ENABLE_NEW_PAYMENT_GATEWAY=false (Keeping feature hidden for now)"
+          sleep 3
+          echo "✅ Code successfully deployed to Production."
+

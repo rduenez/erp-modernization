@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: erp-inventory-api
+spec:
+  replicas: 2 # Start with 2 containers for High Availability
+  selector:
+    matchLabels:
+      app: erp-inventory
+  
+  # Rolling Update Strategy: Do not take down old pods until new ones are ready
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: erp-inventory
+    spec:
+      imagePullSecrets:
+      - name: ghcr-secret
+      containers:
+      - name: api-container
+        image: ghcr.io/rduenez/erp-modernization:v1 # Make sure this matches your pushed image
+        ports:
+        - containerPort: 5000
+        env:
+        - name: APP_VERSION
+          value: "v1.0"
+        
+        # RESOURCE MANAGEMENT: Hard limits so one container can't crash the physical server
+        resources:
+          requests:
+            cpu: "100m" # 1/10th of a CPU core
+            memory: "128Mi"
+          limits:
+            cpu: "250m" # 1/4th of a CPU core
+            memory: "256Mi"            
+        # SELF-HEALING: K8s checks this every 10 seconds.
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+# LOAD BALANCER: Creates a single IP that distributes traffic across all pods
+apiVersion: v1
+kind: Service
+metadata:
+  name: erp-inventory-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: erp-inventory
+  ports:
+    - port: 80
+      targetPort: 5000
+---
+# AUTO-SCALING (HPA): Watch the CPU. If it goes over 50%, spin up more containers!
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: erp-api-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: erp-inventory-api
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 5

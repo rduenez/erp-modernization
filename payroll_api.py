@@ -6,7 +6,7 @@ ENV = os.environ.get("ENVIRONMENT", "dev")
 
 def calculate_isr(salary):
     # Simulated 2026 ISR Calculation
-    return salary * 0.18
+    return salary * 0.20
 
 @app.route('/api/payroll/calculate', methods=['GET'])
 def calculate_payroll():

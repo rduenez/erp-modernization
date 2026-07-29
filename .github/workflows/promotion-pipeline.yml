@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 defaults:
   run:
-    working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.16.10.1. Lab 10. E2E Pipeline and Promotion Process/erp-promotion-lab'
+    working-directory: '.'
 jobs:
   # CI: BUILD & TEST (Runs on PRs and Pushes)
   continuous-integration:

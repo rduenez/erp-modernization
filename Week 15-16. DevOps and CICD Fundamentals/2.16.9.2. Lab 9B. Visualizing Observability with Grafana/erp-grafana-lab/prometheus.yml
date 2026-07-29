@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s # Scrape data every 5 seconds for near real-time dashboards
+
+scrape_configs:
+  - job_name: 'erp_api'
+    static_configs:
+      # We use the Podman container name "erp-app" as the hostname!
+      - targets: ['erp-app:8080']

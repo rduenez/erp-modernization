@@ -1,0 +1,55 @@
+name: ERP Promotion Pipeline
+# Trigger on Pull Requests to test features, and on Pushes to main to deploy
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+defaults:
+  run:
+    working-directory: 'Week 15-16. DevOps and CICD Fundamentals/2.16.10.1. Lab 10. E2E Pipeline and Promotion Process/erp-promotion-lab'
+jobs:
+  # CI: BUILD & TEST (Runs on PRs and Pushes)
+  continuous-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+      - run: pip install -r requirements.txt
+      - name: Run PyTest
+        run: pytest
+      - name: Build Immutable Container Image
+        run: |
+          echo "Building my-company/erp-payroll:${{ github.sha }}"
+          echo "Pushing image to container registry..."
+
+  # CD: PROMOTION PROCESS (Runs ONLY on Pushes to Main)
+  deploy-dev:
+    if: github.event_name == 'push'
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+      - run: echo "Deploying image ${{ github.sha }} to DEV Kubernetes Namespace."
+  deploy-qa:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: QA
+    steps:
+      - run: echo "Deploying image ${{ github.sha }} to QA Kubernetes Namespace."
+      - run: echo "Running automated integration tests against QA Sandbox APIs..."
+  deploy-staging:
+    needs: deploy-qa
+    runs-on: ubuntu-latest
+    environment: Staging # This triggers the Manual Approval Gate!
+    steps:
+      - run: echo "Deploying image ${{ github.sha }} to STAGING Kubernetes Namespace."
+      - run: echo "Executing final performance tests against anonymized data..."
+  deploy-prod:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: Production # This triggers the Final Approval Gate!
+    steps:
+      - run: echo "Deploying image ${{ github.sha }} to PROD Kubernetes Namespace."
+      - run: echo "Deployment complete. Monitoring APM for errors."
